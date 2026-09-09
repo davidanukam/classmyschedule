@@ -1,0 +1,21 @@
+{
+  "name": "classmyschedule",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cross-browser release tooling and tests for ClassMyCalendar.",
+  "scripts": {
+    "stage": "node scripts/build.mjs",
+    "test": "node --test",
+    "lint:firefox": "npm run stage && web-ext lint --source-dir build/firefox",
+    "package:firefox": "npm run stage && web-ext build --source-dir build/firefox --artifacts-dir dist --filename classmycalendar-firefox-v2.0.0.zip --overwrite-dest",
+    "package:chrome": "npm run stage && web-ext build --source-dir build/chrome --artifacts-dir dist --filename classmycalendar-chrome-v2.0.0.zip --overwrite-dest",
+    "release": "npm test && npm run lint:firefox && npm run package:firefox && npm run package:chrome"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "web-ext": "^10.5.0"
+  }
+}

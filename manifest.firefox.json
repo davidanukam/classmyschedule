@@ -18,17 +18,15 @@
     },
     "default_title": "ClassMyCalendar"
   },
-  "permissions": ["tabs", "storage", "identity", "scripting"],
+  "permissions": ["tabs", "storage", "identity", "scripting", "downloads"],
   "host_permissions": [
     "https://draftmyschedule.uwo.ca/*",
     "https://www.westerncalendar.uwo.ca/*",
-    "https://www.googleapis.com/*",
-    "https://accounts.google.com/*",
     "https://login.microsoftonline.com/*",
     "https://graph.microsoft.com/*"
   ],
   "background": {
-    "service_worker": "background.js",
+    "scripts": ["background.js"],
     "type": "module"
   },
   "content_scripts": [
@@ -38,8 +36,13 @@
       "run_at": "document_idle"
     }
   ],
-  "oauth2": {
-    "client_id": "162482059553-ejq25b7ohmqdtun7odpd0k8l60dg1a43.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/calendar.events"]
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{ca8e7d4b-5156-408e-8b9d-c48d44d1078c}",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["authenticationInfo"]
+      }
+    }
   }
 }
