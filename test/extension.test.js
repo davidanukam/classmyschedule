@@ -176,6 +176,18 @@ test("popup is an ES module that uses the shared extension API", async () => {
   assert.match(popupJs, /downloadIcs/);
   assert.match(backgroundJs, /downloadIcs/);
   assert.match(backgroundJs, /getExtApi/);
+  assert.equal(backgroundJs.includes("data:text/calendar"), false);
+});
+
+test("shortenDownloadError hides huge data: URL failures", async () => {
+  const { shortenDownloadError } = await import("../utils/extApi.js");
+  const error = shortenDownloadError(
+    new Error(
+      "Type error for parameter options (Error processing url: Error: Access denied for URL data:text/calendar;charset=utf-8,BEGIN:VCALENDAR) for downloads.download."
+    )
+  );
+  assert.match(error.message, /blob download/i);
+  assert.equal(error.message.includes("BEGIN:VCALENDAR"), false);
 });
 
 test("getExtApi throws outside an extension runtime", async () => {

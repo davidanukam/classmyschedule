@@ -13,6 +13,31 @@ Any layout changes on DraftMySchedule may break scraping. The extension reads th
 
 SUPPORT TIMELINE: supported roughly through 2029/2030, or until Western ships an official export. Forks welcome.
 
+## Install
+
+### Firefox (and Zen, Floorp, LibreWolf, Waterfox)
+
+Install from [Firefox Browser Add-ons](https://addons.mozilla.org/firefox/addon/classmycalendar/):
+
+1. Open the listing in Firefox or another Firefox-based browser.
+2. Click **Add to Firefox** and accept the permissions.
+3. Pin ClassMyCalendar to the toolbar if you want it always visible.
+4. Open [DraftMySchedule](https://draftmyschedule.uwo.ca/), show your class list, then click the add-on icon.
+5. Export a `.ics` file, or connect Outlook for one-click sync.
+
+Requires **Firefox 142+**. The same Firefox add-on is what you install in Zen and other Gecko browsers (`Add to Firefox` still applies).
+
+If the store listing is not live yet, load `build/firefox` as a temporary add-on (see [Local development](#local-development)).
+
+### Chrome
+
+Chrome uses the Chromium package (Google Calendar sync + `.ics`). Install from the Chrome Web Store when listed, or load `build/chrome` unpacked (see [Local development](#local-development)).
+
+| Browser | Install | Sync | Export |
+|---------|---------|------|--------|
+| **Firefox / Zen** | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/classmycalendar/) | Outlook | `.ics` |
+| **Chrome** | Chrome Web Store or unpacked | Google Calendar | `.ics` |
+
 ## Features
 
 - One-click **Export .ics** for Fall and Winter
@@ -24,6 +49,8 @@ SUPPORT TIMELINE: supported roughly through 2029/2030, or until Western ships an
 ## Local development
 
 Requirements: Node.js 20+, npm, Firefox (or Zen / another Gecko browser) for add-on testing.
+
+End users should install from [Firefox Add-ons](#firefox-and-zen-floorp-librewolf-waterfox), not from a source checkout.
 
 ```sh
 npm install
@@ -37,7 +64,9 @@ Staged directories:
 - `build/firefox`
 - `build/chrome`
 
-### Load in Firefox
+### Load in Firefox (temporary / development)
+
+Use this only while developing, or until the AMO listing is live:
 
 1. `npm run stage`
 2. `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on**

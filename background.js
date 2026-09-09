@@ -1,7 +1,7 @@
 import { PRODUCT_NAME, STORAGE_KEYS } from "./constants.js";
 import { makeICS } from "./utils/ics.js";
 import { resolveTermDates } from "./utils/termDates.js";
-import { downloadUrl, getExtApi, isFirefox } from "./utils/extApi.js";
+import { downloadTextFile, getExtApi, isFirefox } from "./utils/extApi.js";
 import {
   getGoogleAccessToken,
   isGoogleAvailableOnThisBrowser,
@@ -143,10 +143,11 @@ async function handleDownloadIcs(message) {
   }
 
   try {
-    // Data URLs stay valid if a Firefox event page sleeps during the save dialog.
-    await downloadUrl({
-      url: `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`,
+    // Firefox forbids data: URLs in downloads.download(); blob: URLs are allowed.
+    await downloadTextFile({
+      body: ics,
       filename: filename || "schedule.ics",
+      mimeType: "text/calendar;charset=utf-8",
       saveAs: true
     });
     return ok();

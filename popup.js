@@ -1,4 +1,4 @@
-import { getExtApi, isFirefox } from "./utils/extApi.js";
+import { downloadTextFile, getExtApi, isFirefox } from "./utils/extApi.js";
 
 const ext = getExtApi();
 
@@ -212,19 +212,39 @@ onReady(() => {
   }
 
   async function downloadIcs(ics, filename) {
+    const safeName = filename || "schedule.ics";
+
     if (isFirefox()) {
-      return sendMessage({
+      const fromBackground = await sendMessage({
         action: "downloadIcs",
         ics,
-        filename: filename || "schedule.ics"
+        filename: safeName
       });
+      if (fromBackground?.success) return fromBackground;
+
+      try {
+        await downloadTextFile({
+          body: ics,
+          filename: safeName,
+          mimeType: "text/calendar;charset=utf-8",
+          saveAs: true
+        });
+        return { success: true };
+      } catch (error) {
+        return {
+          success: false,
+          error:
+            fromBackground?.error ||
+            (error instanceof Error ? error.message : "Could not download .ics.")
+        };
+      }
     }
 
     const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = filename || "schedule.ics";
+    a.download = safeName;
     a.click();
     URL.revokeObjectURL(url);
     return { success: true };
