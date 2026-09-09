@@ -1,74 +1,136 @@
 <div align="center">
 
-  <img src="icon.png" alt="logo" width="200" height="auto" />
-  <h1>ClassMySchedule</h1>
-  
+  <img src="assets/icon128.png" alt="logo" width="128" height="auto" />
+  <h1>ClassMyCalendar</h1>
+
   <p>
-    For the students at the University of Western Ontario to export classes from their DraftMySchedule over to any calendar apps
+    Export classes from Western’s DraftMySchedule to <code>.ics</code>, Google Calendar, or Outlook — Chrome and Firefox.
   </p>
-
-  
-<p>
-  <a href="https://github.com/jshklz/classmyschedule/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/jshklz/classmyschedule" alt="contributors" />
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/github/last-commit/jshklz/classmyschedule" alt="last update" />
-  </a>
-  <a href="https://github.com/jshklz/classmyschedule/network/members">
-    <img src="https://img.shields.io/github/forks/jshklz/classmyschedule" alt="forks" />
-  </a>
-  <a href="https://github.com/jshklz/classmyschedule/stargazers">
-    <img src="https://img.shields.io/github/stars/jshklz/classmyschedule" alt="stars" />
-  </a>
-  <a href="https://github.com/jshklz/classmyschedule/issues/">
-    <img src="https://img.shields.io/github/issues/jshklz/classmyschedule" alt="open issues" />
-  </a>
-  <a href="https://github.com/jshklz/classmyschedule/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/jshklz/classmyschedule" alt="license" />
-  </a>
-</p>
- 
-
-Any layout changes done on DraftMySchedule may cause this extension to break. This app takes advantage of scraping the Class List that's below the visual view of the calendar. If DraftMySchedule decides to remove that, or change how it's rendered, the extension will most likely not work.
-
-SUPPORT TIMELINE: 'classmyschedule' will remain supported for roughly till 2029/2030 or whether Western has internally implemented these features onto DraftMySchedule. If you want the extension to last longer, you are always welcomed to fork the extension and fix any issues. 
-
 
 </div>
 
 
-> [!NOTE]  
-> If the extension is not working, you might want to disable other extension(s) you may have as it might be conflicting with the ClassMySchedules' extension. For any other problems, raise an issue on the Github. 
+> [!NOTE]
+> If the extension is not working, you might want to disable other extension(s) you may have as it might be conflicting with the ClassMySchedules' extension. For any other problems, raise an issue on the Github.
 
-# How To Install?
+SUPPORT TIMELINE: supported roughly through 2029/2030, or until Western ships an official export. Forks welcome.
 
-To install on any Chromium-based (like Brave) web browser, follow the steps:
+## Install
 
-1. Download this GitHub Repository, extract it
+### Firefox (and Zen, Floorp, LibreWolf, Waterfox)
 
-2. Go to chrome://extensions
+Install from [Firefox Browser Add-ons](https://addons.mozilla.org/firefox/addon/classmycalendar/):
 
-3. Enable developer mode! It's a slider that should be located on the top right
+1. Open the listing in Firefox or another Firefox-based browser.
+2. Click **Add to Firefox** and accept the permissions.
+3. Pin ClassMyCalendar to the toolbar if you want it always visible.
+4. Open [DraftMySchedule](https://draftmyschedule.uwo.ca/), show your class list, then click the add-on icon.
+5. Export a `.ics` file, or connect Outlook for one-click sync.
 
-4. Click on 'Load Unpacked'
+Requires **Firefox 142+**. The same Firefox add-on is what you install in Zen and other Gecko browsers (`Add to Firefox` still applies).
 
-5. Find the folder that the repository was extracted to, and click Select.
+If the store listing is not live yet, load `build/firefox` as a temporary add-on (see [Local development](#local-development)).
 
+### Chrome
 
-I do have plans on releasing the extension on Google Webstore, but I heard that's a tedious process and so far haven't gone around doing it.
+Chrome uses the Chromium package (Google Calendar sync + `.ics`). Install from the Chrome Web Store when listed, or load `build/chrome` unpacked (see [Local development](#local-development)).
 
+| Browser | Install | Sync | Export |
+|---------|---------|------|--------|
+| **Firefox / Zen** | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/classmycalendar/) | Outlook | `.ics` |
+| **Chrome** | Chrome Web Store or unpacked | Google Calendar | `.ics` |
 
+## Features
 
-# Wow, I really like your project. How do I donate?
+- One-click **Export .ics** for Fall and Winter
+- Auto term dates from the [Western Academic Calendar](https://www.westerncalendar.uwo.ca/SessionalDates.cfm), with a triangle disclosure for manual override
+- Optional **Google Calendar** and **Microsoft Outlook** sync (OAuth)
+- `.ics` works with Apple Calendar, Notion, Obsidian, and other importers
+- Shared codebase for Chrome and Firefox/Zen (Gecko `browser.*` APIs, Chromium `chrome.*` fallback)
 
-If you'd like to support me, consider doing any of the following (but not limited to):
+## Local development
 
-1. Donating to charity
-2. Helping the elderly in your community
-3. Doing some volunteering work at a hospital
-4. Picking up trash around your neighbourhood
-5. Anything that brings a net gain to this world. 
+Requirements: Node.js 20+, npm, Firefox (or Zen / another Gecko browser) for add-on testing.
 
-If you can do that, I will be forever grateful!
+End users should install from [Firefox Add-ons](#firefox-and-zen-floorp-librewolf-waterfox), not from a source checkout.
 
+```sh
+npm install
+npm test
+npm run lint:firefox
+npm run stage
+```
+
+Staged directories:
+
+- `build/firefox`
+- `build/chrome`
+
+### Load in Firefox (temporary / development)
+
+Use this only while developing, or until the AMO listing is live:
+
+1. `npm run stage`
+2. `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on**
+3. Choose `build/firefox/manifest.json`
+
+Or: `npx web-ext run --source-dir build/firefox`
+
+Zen, Floorp, LibreWolf, and Waterfox use the same Firefox package (`about:debugging` still applies). Do not load the repo root in Firefox — the root `manifest.json` is the Chrome service-worker build.
+
+### Load in Chrome
+
+1. `npm run stage`
+2. `chrome://extensions` → Developer mode → **Load unpacked** → `build/chrome`
+
+## OAuth setup (optional sync)
+
+Sync is browser-specific:
+
+| Browser | Sync | Export |
+|---------|------|--------|
+| **Chrome** | Google Calendar | `.ics` |
+| **Firefox / Zen** | Microsoft Outlook | `.ics` |
+
+Google Web-client OAuth on Firefox/Zen is not supported (redirect UUID issues with Google Cloud).
+
+### Google Calendar (Chrome only)
+
+1. Create a Google Cloud project and enable the **Google Calendar API**.
+2. Create an OAuth client ID with application type **Chrome Extension**.
+3. Item ID = your Chrome extension ID from `chrome://extensions`.
+4. Put the client ID in `manifest.json` → `oauth2.client_id` and `constants.js` → `GOOGLE_OAUTH_CLIENT_ID_CHROME`.
+5. Add yourself as a test user on the OAuth consent screen while the app is in Testing.
+6. Re-run `npm run stage` and load `build/chrome`.
+
+Never put Google client secrets in the extension.
+
+### Microsoft Outlook (Firefox / Zen only)
+
+1. Register a public client app in Azure AD (multi-tenant + personal accounts).
+2. Add SPA redirect URIs from `identity.getRedirectURL()` for your Firefox/Zen install (and Chrome’s chromiumapp.org URI if you also test elsewhere).
+3. Expose delegated permission `Calendars.ReadWrite` (plus openid / profile / offline_access).
+4. Set **Allow public client flows** = Yes (PKCE, no client secret).
+5. Set `MICROSOFT_CLIENT_ID` in `constants.js`.
+6. Re-run `npm run stage` and load `build/firefox`.
+
+## Build release packages
+
+```sh
+npm run release
+```
+
+Creates:
+
+- `dist/classmycalendar-firefox-v2.0.0.zip`
+- `dist/classmycalendar-chrome-v2.0.0.zip`
+
+Bump the version in `package.json`, both manifests, and the package script filenames together. Keep the Firefox `gecko.id` unchanged forever.
+
+## Privacy
+
+See [PRIVACY.md](PRIVACY.md). Store/AMO listings should link a stable public URL for this policy.
+
+## Credits
+
+Originally created for Western students. Not affiliated with Western University or DraftMySchedule.
