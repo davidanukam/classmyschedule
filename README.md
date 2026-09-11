@@ -40,6 +40,10 @@ Chrome uses the Chromium package (Google Calendar sync + `.ics`). Install from t
 | **Firefox / Zen** | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/classmycalendar/) | Outlook | `.ics` |
 | **Chrome** | Chrome Web Store or unpacked | Google Calendar | `.ics` |
 
+# How to Use
+
+Please navigate to DraftMySchedule, and then click on the **My Current Schedule** section. Afterwards, adhere closely to the video's instructions. https://www.youtube.com/watch?v=svZQJvF7gnI
+
 ## Features
 
 - One-click **Export .ics** for Fall and Winter
